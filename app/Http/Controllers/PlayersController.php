@@ -57,7 +57,9 @@ class PlayersController extends Controller {
                 ->where('email', '=', $email)->get();
               
                 if (password_verify($password, $passHash[0]->password)){
-                        return response()->json("sucess");
+                       return Player::select('user_name')
+                        ->where('email', '=',$email )->get();
+
                 }else{
                         return response()->json($err);
                 }
@@ -121,9 +123,15 @@ class PlayersController extends Controller {
                 $email = Request::input('email');
                 $sex = Request::input('sex');
                 $password = Request::input('password');
-              //  $password = md5($password);
-
-                $password = password_hash($password, PASSWORD_ARGON2I, ['memory_cost' => 1<<12, 'time_cost' => 4, 'threads' => 4]);
+                // $password = md5($password);
+                //$password = password_hash($password, PASSWORD_ARGON2I, ['memory_cost' => 1<<12, 'time_cost' => 4, 'threads' => 4]);
+                
+                $options = [
+                         'cost' => 10,
+                ];
+                
+                $password = password_hash($password, PASSWORD_BCRYPT, $options);
+              
                 
                 
                 $newPlayer = Player::create(['user_name' => $user_name, 'name' => $name, 
@@ -136,8 +144,7 @@ class PlayersController extends Controller {
         public function plusVictory(){
                 $user_name = Request::input('user_name');
                 $amountVictory = Player::select('amount_victories_total')
-                        ->where('user_name', '=',$user_name )
-                        ->get();
+                        ->where('user_name', '=',$user_name )->get();
 
                 $amountVictory[0]->amount_victories_total++ ;
 
