@@ -104,7 +104,7 @@ class Helpers{
 
     for($i=0; $i <=$numbSquare; $i++){
                if($coordPlayerBoard[1] == $axisX[0][$i]){
-                    $coordPlayerPlane[0] = $axisX[1][$i];
+                    $coordPlayerPlane[0] = $axisX[1][$i]; // valor cartesiano
                     for($j = 0; $j <= $numbSquare; $j++){
                         if($coordPlayerBoard[0] == $axisY[0][$j]){
                         $coordPlayerPlane[1] = $axisY[1][$j];

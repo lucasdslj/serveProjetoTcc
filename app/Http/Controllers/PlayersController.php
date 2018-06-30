@@ -55,11 +55,15 @@ class PlayersController extends Controller {
 
                 $passHash = Player::select('password')
                 ->where('email', '=', $email)->get();
+
+                if (empty($passHash[0])){
+                        return response()->json($err);
+                }
               
                 if (password_verify($password, $passHash[0]->password)){
-                       return Player::select('user_name')
+                        return Player::select('user_name')
                         ->where('email', '=',$email )->get();
-
+                        
                 }else{
                         return response()->json($err);
                 }
@@ -106,7 +110,7 @@ class PlayersController extends Controller {
                 $email  = Player::where('email','=', $email)->get();
 
 
-                if(empty($email [0])){
+                if(empty($email[0])){
                         $message = "available";
                         return response()->json($message);
                 }else{

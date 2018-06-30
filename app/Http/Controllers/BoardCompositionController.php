@@ -67,20 +67,20 @@ class BoardCompositionController extends Controller {
 
             //verificando a maior distância e multiplicando-a por um número aleatório de 1 a 3 p/ definir distancias do par P1
             if($extensionLongLat[0] > $extensionLongLat[1]){
-                $dist1P1 = $extensionLongLat[0] * rand(1,3);
-                $dist2P1 = $extensionLongLat[0] * rand(1,3);
+                $dist1P1 = $extensionLongLat[0] * mt_rand(1,3);
+                $dist2P1 = $extensionLongLat[0] * mt_rand(1,3);
 
             }elseif($extensionLongLat[1] > $extensionLongLat[0]){
-                $dist1P1 = $extensionLongLat[1] * rand(1,3);
-                $dist2P1 = $extensionLongLat[1] * rand(1,3);
+                $dist1P1 = $extensionLongLat[1] * mt_rand(1,3);
+                $dist2P1 = $extensionLongLat[1] * mt_rand(1,3);
             //extensão longitudinal e latitudinal são iguais, portanto, não difere qual extensão selecionar como a maior   
             }else{
-                $dist1P1 = $extensionLongLat[0] * rand(1,3);
-                $dist2P1 = $extensionLongLat[0] * rand(1,3);
+                $dist1P1 = $extensionLongLat[0] * mt_rand(1,3);
+                $dist2P1 = $extensionLongLat[0] * mt_rand(1,3);
             }
 
             //definindo distancias do par P2
-            $aux = rand(1,2);
+            $aux = mt_rand(1,2); //utilizada somente 1P1 e 1P2. 1P2 é sempre o mesmo que 2P1
 
             switch($aux){
                 case 1:
@@ -104,13 +104,11 @@ class BoardCompositionController extends Controller {
             //marcando coordenada 1 do par P2           
             $coord1P2 = Helpers::markingCoordinates($coordBase, $dist1P2, 'north'); //1P2 ao NORTE da coordenada base
 
-            //coordenada A1
-            
+            //coordenada A1            
             $board[0][0] = array($coord1P2[0], $coord1P1[1]);
-            //echo '</br>';
-
+           
             //definindo quantidade e tamanho dos quadrantes do tabuleiro
-            $numbSquare =  rand(7,15); // numbSquare+1 resulta em um tabuleiro numbSquare+1 por numbSquare+1
+            $numbSquare =  mt_rand(7,15); // numbSquare+1 resulta em um tabuleiro numbSquare+1 por numbSquare+1
             $sizeSquare = round($distTotal / $numbSquare);
            
            
@@ -120,7 +118,7 @@ class BoardCompositionController extends Controller {
                   $board[$j-1][$i] = Helpers::markingCoordinates($board[$j-1][$i-1], $sizeSquare, 'east');
                 }
                 if($j!= $numbSquare+1){
-                $board[$j][$i-$i] = Helpers::markingCoordinates($board[$j-1][$i-$i], $sizeSquare, 'south');
+                    $board[$j][$i-$i] = Helpers::markingCoordinates($board[$j-1][$i-$i], $sizeSquare, 'south');
                 }
             }
           
@@ -170,8 +168,7 @@ class BoardCompositionController extends Controller {
                           //  echo '<script>console.log("scala colocada',$scale,'")</script>';  
                             break;
                         }
-
-                        
+  
                        // echo '<script>console.log("scala ',$scale,'")</script>';  
                     }
                                     
@@ -185,7 +182,7 @@ class BoardCompositionController extends Controller {
                     
                 case 4:
                     $x = mt_rand(0,$numbSquare); 
-                    $y = mt_rand (0,$numbSquare);
+                    $y = mt_rand(0,$numbSquare);
                     $scale = mt_rand(2 , 10); ;                  
                     break;   
                     
@@ -197,7 +194,7 @@ class BoardCompositionController extends Controller {
                         $scale = mt_rand(2 , 22);  
                         if($scale % 2==0){
                             $scale = (25 / $scale);
-                            $scale =round($scale, 1);
+                            $scale = round($scale, 1);
                             break;
 
                         }
@@ -212,11 +209,11 @@ class BoardCompositionController extends Controller {
             //$scale = 1; //escala ==> usar no lugar do auxiliar <==
 
             //axisX: longitude, valor
-            $axisX[0][$y] = $board[$x][$y][1];
+            $axisX[0][$y] = $board[$x][$y][1]; // apenas longitude
             $axisX[1][$y] = 0;
                     
             //axisY: latitude, valor
-            $axisY[0][$x] = $board[$x][$y][0];
+            $axisY[0][$x] = $board[$x][$y][0]; // apenas latitude
             $axisY[1][$x]= 0;
             
         
@@ -229,8 +226,8 @@ class BoardCompositionController extends Controller {
 
             $aux = 1;
             for($i = $y-1; $i >= 0; $i--) {
-                $axisX[0][$i] = $board[$x][$y-$aux][1];
-                $axisX[1][$i] = -$scale * $aux; //==> alterar aqui scale<==
+                $axisX[0][$i] = $board[$x][$y-$aux][1]; 
+                $axisX[1][$i] = -$scale * $aux; 
                 $aux++;
                           
               //echo '<script>console.log("entro -X")</script>';   
@@ -252,7 +249,7 @@ class BoardCompositionController extends Controller {
             //definindo coordenadas do eixo Y - pontos positivos 
             $aux = 1;
             for($i = $x-1; $i >= 0; $i--) {
-                $axisY[0][$i] = $board[$x-$aux][$y][0];
+                $axisY[0][$i] = $board[$x-$aux][$y][0]; 
                 $axisY[1][$i] = $scale *$aux; 
                 $aux++;           
                //  echo '<script>console.log("entro Y")</script>';   
