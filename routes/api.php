@@ -49,6 +49,8 @@ Route::post('delRematch','PlayersController@delRematch');
 //atribui a  locatização
 Route::post('setLocation','PlayersController@setLocation');
 
+Route::post('calcDistance','BoardCompositionController@calcDistance');
+
 
 
 //não utilizado

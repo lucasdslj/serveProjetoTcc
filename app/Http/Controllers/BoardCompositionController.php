@@ -158,51 +158,37 @@ class BoardCompositionController extends Controller {
                     $y = 0;
                     $scale = 1;
                     break;
-
                 case 2:
                     $x = $numbSquare; 
                     $y = 0;
-                    for($i=  INF; $i=1;$i++){
+                    for($i= INF; $i=1;$i++){
                         $scale = mt_rand(2 , 10);  
                         if($scale % 2==0){
-                          //  echo '<script>console.log("scala colocada',$scale,'")</script>';  
                             break;
-                        }
-  
-                       // echo '<script>console.log("scala ',$scale,'")</script>';  
-                    }
-                                    
+                        } 
+                    }                                    
                     break;
-
                 case 3:
                     $x = mt_rand(0,$numbSquare); 
                     $y = mt_rand(0,$numbSquare);
                     $scale = 1;                  
-                    break;   
-                    
+                    break;                      
                 case 4:
                     $x = mt_rand(0,$numbSquare); 
                     $y = mt_rand(0,$numbSquare);
                     $scale = mt_rand(2 , 10); ;                  
-                    break;   
-                    
+                    break;                       
                 case 5:
                     $x = mt_rand(0,$numbSquare); 
                     $y = mt_rand (0,$numbSquare);
-                    //verificar
                     for($i=0; $i>-1;$i++){
                         $scale = mt_rand(2 , 22);  
                         if($scale % 2==0){
                             $scale = (25 / $scale);
                             $scale = round($scale, 1);
                             break;
-
                         }
-
-                    }
-
-                //segunda opção dividir dois números aleatórios
-                  //  $scale = mt_rand(1,5)+ mt_rand(2,9) ;                  
+                    }               
                     break;    
             }
 
@@ -273,12 +259,22 @@ class BoardCompositionController extends Controller {
             $coordPlayer2Plane = Helpers::markCoordPlayerPlane($coordPlayer2Board, $axisX, $axisY, $numbSquare);
             
             //print_r($coordPlayer1Plane);
+            //testes
+            $distTransladadaP1 = Helpers::calcDistance($player1[0]->latitude, $player1[0]->longitude, $coordPlayer1Board[0], $coordPlayer1Board[1]);
+            $distTransladadaP2 = Helpers::calcDistance($player2[0]->latitude, $player2[0]->longitude, $coordPlayer2Board[0], $coordPlayer2Board[1]);
+            $distJogadores = Helpers::calcDistance($player1[0]->latitude, $player1[0]->longitude, $player2[0]->latitude, $player2[0]->longitude);
+            $distanciaVertice = Helpers::calcDistance($board[0][0][0], $board[0][0][1], $board[0][1][0], $board[0][1][1]);
+            $distanciaVerticeTab = Helpers::calcDistance($board[0][0][0], $board[0][0][1], $board[0][$numbSquare][0], $board[0][$numbSquare][1]);
 
+            $rs = array( $board,  $coordPlayer1Board, $coordPlayer2Board, $coordPlayer1Plane, $coordPlayer2Plane, $axisX, $axisY,
+              $levelPlayer2[0]->level);
         
-            $rs = array($board,  $coordPlayer1Board, $coordPlayer2Board, $coordPlayer1Plane, $coordPlayer2Plane,
-             $axisX, $axisY, $distTotal, $levelPlayer2[0]->level );
+           // $rs = array(  $coordPlayer1Board, $coordPlayer2Board, $axisX, $axisY,
+           //   $levelPlayer2[0]->level, $extensionLongLat[0], $extensionLongLat[1], $distJogadores,  $coordPlayer1Plane, $coordPlayer2Plane,
+            //   $distTransladadaP2,  $distTransladadaP1, $distanciaVerticeTab,  $distanciaVertice, $numbSquare );
             return response()->json($rs);
            
+            //$distTotal, $levelPlayer2[0]->level, $extensionLongLat[0], $extensionLongLat[1], $distJogadores, $distanciaVertice, $distTransladada, $numbSquare
 
             //echo Helpers::calcDistance($board[1][2][0], $board[1][2][1], $board[1][3][0], $board[1][3][1] );
             //return $board;         
@@ -289,56 +285,18 @@ class BoardCompositionController extends Controller {
            // Helpers::testMarkCoord($dist1P1, $coordBase, $coord1P1, 'x', 'west');
             //echo '</br>',$numbSquare;
 
+        }
+
+        public function calcDistance(){
            
-            /*/////////////////////////////////////////////////////////////////////////////
+            $lat1 = Request::input('lat1');
+            $lng1 = Request::input('lng1');
 
-             $distDown = INF;
-            for($j = 0; $j < $numbSquare; $j++ ){
-                for($i = 0; $i < $numbSquare; $i++ ){
-                    $dist = Helpers::calcDistance($coordPlayer1[0], $coordPlayer1[1], $board[$j][$i][0], $board[$j][$i][1]);
+            $lat2 = Request::input('lat2');
+            $lng2 = Request::input('lng2');
 
-                if ($dist< $distDown){
-                    $coordPlayer1Board[0] = $board[$j][$i][0];
-                    $coordPlayer1Board[1] = $board[$j][$i][1];
-                    $distDown = $dist;
-                }
-                }
-            } 
+           return Helpers::calcDistance($lat1, $lng1, $lat2, $lng2);
 
-            //2P1 a LESTE da coordenada base
-            $coord2P1 = Helpers::markingCoordinates($coordBase, $dist2P1, 'east');
-            //1P2 ao SUL da coordenada base
-            $coord2P2 = Helpers::markingCoordinates($coordBase, $dist2P2, 'south');
-            // echo 'P1 ', $dist1P1, '  ',  $dist2P1, ' P2  ',   $dist1P2, '  ',   $dist2P2;
-
-          
-            //$ExtensionLong = Helpers::calcDistance($coordUser1[0], $coordUser1[1], $coordBase[0], $coordBase[1]);
-
-            //$ExtensionLat = Helpers::calcDistance($coordUser2[0], $coordUser2[1], $coordBase[0], $coordBase[1]);
-            //echo $coordUser1[0];
-
-
-                     
-           
-            /*
-            echo $html = 'Player '. $player1[0]->user_name . ' - latitude: ' . $coordUser1[0] 
-            . ' longitude: '. $coordUser1[1];
-            echo $html = '</br> Player '. $player2[0]->user_name . ' -  latitude: ' . $coordUser2[0]
-            . ' longitude: '. $coordUser2[1];
-          
-
-         
-            /* 
-            $html = '<h1 align=center>Players battleship </h1>';     
-            $player = DB::select('select * from players where user_name = ?', [$id]);
-            foreach($player as $p ){
-                $html .= '</br>Player: ' . $p->user_name;
-
-            }
-
-            */
-            //return $html;
-            
         }
 
 }

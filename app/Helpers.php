@@ -83,18 +83,18 @@ class Helpers{
       }
       
     }
-  public static function markCoordPlayerBoard($coordPlayer, $board, $numbSquare  ){ 
+  public static function markCoordPlayerBoard($coordPlayer, $board, $numbSquare ){ 
     
      $distDown = INF;
             for($j = 0; $j <= $numbSquare; $j++ ){
                 for($i = 0; $i <= $numbSquare; $i++ ){
                     $dist = Helpers::calcDistance($coordPlayer[0], $coordPlayer[1], $board[$j][$i][0], $board[$j][$i][1]);
 
-                if ($dist< $distDown){
-                    $coordPlayerBoard[0] = $board[$j][$i][0];
-                    $coordPlayerBoard[1] = $board[$j][$i][1];
-                    $distDown = $dist;
-                }
+                  if ($dist< $distDown){
+                      $coordPlayerBoard[0] = $board[$j][$i][0];
+                      $coordPlayerBoard[1] = $board[$j][$i][1];
+                      $distDown = $dist;
+                    }
                 }
             } 
             return $coordPlayerBoard;

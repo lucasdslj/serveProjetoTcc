@@ -21,7 +21,7 @@ class PlayersController extends Controller {
 
 
              $players  = Player::join('level','level.id_level','=','players.level_id')
-                ->select('players.user_name', 'level.level', 'level.patent', 'level.ship' , 'level.attack_force', 'level.defense_force', 
+                ->select('players.user_name',  'players.sex', 'players.sex', 'level.level', 'level.patent', 'level.ship' , 'level.attack_force', 'level.defense_force', 
                 'level.amount_life', 'level.amount_bomb', 'level.time', 'level.xp_given')
                 ->where('user_name','!=', $player)->get();
 
@@ -76,7 +76,7 @@ class PlayersController extends Controller {
 
 
                 $dataPlayer  = Player::join('level','level.id_level','=','players.level_id')                
-                        ->select('players.user_name', 'level.level', 'level.patent', 'level.ship' , 'level.attack_force', 
+                        ->select('players.user_name', 'players.sex','level.level', 'level.patent', 'level.ship' , 'level.attack_force', 
                         'level.defense_force', 'players.amount_xp', 'players.amount_victories_total', 'players.amount_defeats_total', 'level.amount_level_up',
                         'level.amount_life')
                         ->where('user_name','=', $player)->get();
@@ -210,8 +210,8 @@ class PlayersController extends Controller {
         }
 
         public function addRematch(){
-                $user_name = Request::input('user_name');
-                $user_name_adversary = Request::input('user_name_adversary');
+                $user_name = Request::input('user_name_adversary');
+                $user_name_adversary = Request::input('user_name');
 
                 $count = Rematch::where('player_adversary','=', $user_name_adversary )
                         ->where('user_name_player', '=', $user_name)->count();
@@ -250,7 +250,7 @@ class PlayersController extends Controller {
                 $player_adversary = Rematch::join('players','players.user_name','=','rematches.player_adversary')
                         ->join('level','level.id_level','=','players.level_id')  
                         ->select('rematches.amount_victories', 'rematches.player_adversary', 'level.patent','level.ship', 'level.attack_force',
-                        'level.defense_force','level.amount_life', 'level.level', 'level.amount_bomb', 'level.time', 'level.xp_given', 'players.amount_xp' )
+                        'level.defense_force','level.amount_life', 'level.level', 'level.amount_bomb', 'level.time', 'level.xp_given', 'players.amount_xp', 'players.sex' )
                         ->where('user_name_player','=', $user_name)->get();
 
                 return $player_adversary;
